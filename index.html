@@ -1,0 +1,114 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Solutions - Innovative Business Consulting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gray-100 text-gray-900">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-indigo-600">Quantum Solutions</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-gray-600 hover:text-indigo-600">Home</a>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-gray-600 hover:text-indigo-600">Services</a>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-gray-600 hover:text-indigo-600">About</a>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-gray-600 hover:text-indigo-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-indigo-600 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-4">Empowering Your Business Future</h2>
+            <p class="text-lg mb-8">Discover cutting-edge solutions to elevate your business with Quantum Solutions.</p>
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Strategic Consulting</h3>
+                    <p class="text-gray-600 mb-4">Unlock your business potential with our expert strategies.</p>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-indigo-600 hover:underline">Learn More</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Digital Transformation</h3>
+                    <p class="text-gray-600 mb-4">Modernize your operations with innovative digital solutions.</p>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-indigo-600 hover:underline">Learn More</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Data Analytics</h3>
+                    <p class="text-gray-600 mb-4">Leverage data to drive informed decision-making.</p>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-indigo-600 hover:underline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2025 Quantum Solutions. All rights reserved.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="hover:text-indigo-400">Privacy Policy</a>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="hover:text-indigo-400">Terms of Service</a>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="hover:text-indigo-400">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
